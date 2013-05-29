@@ -5,7 +5,7 @@ private void enforceType(JSON_TYPE type)(ref JSONValue value) {
     if(type != value.type) throw new JSONException("JSON type mismatch.");
 }
 
-template packTempl(JSON_TYPE jtype, string typeparam, T) {
+private template packTempl(JSON_TYPE jtype, string typeparam, T) {
     JSONValue pack(T value) {
         JSONValue jvalue;
         jvalue.type = jtype;
@@ -14,14 +14,14 @@ template packTempl(JSON_TYPE jtype, string typeparam, T) {
     }
 }
 
-template unpackTempl(JSON_TYPE jtype, string typeparam, T) {
+private template unpackTempl(JSON_TYPE jtype, string typeparam, T) {
     T unpack(JSONValue jvalue) {
         enforceType!jtype(jvalue);
         mixin("return jvalue." ~ typeparam ~ ";");
     }
 }
 
-template bothTempl(JSON_TYPE jtype, string typeparam, T) {
+private template bothTempl(JSON_TYPE jtype, string typeparam, T) {
     mixin packTempl!(jtype, typeparam, T);
     mixin unpackTempl!(jtype, typeparam, T);
 }

@@ -61,13 +61,10 @@ interface WorldSerialiser {
 class JsonWorldSerialiser : WorldSerialiser {
     
     JSONValue freezeSquare(Square square) {
-        JSONValue height_val = json.pack(square.height);
-        JSONValue val = json.pack(["height" : height_val]);
-        return val;
+        return json.pack(["height" : json.pack(square.height)]);
     }
     
     override public string freeze(World world) {
-        auto sidesize_val = json.pack(world.sidesize);
         
         auto app = appender(new JSONValue[0]);
         app.reserve(world.sidesize * world.sidesize);
@@ -78,8 +75,7 @@ class JsonWorldSerialiser : WorldSerialiser {
             }
         }
         
-        auto squares_val = json.pack(app.data);
-        auto world_val = json.pack(["sidesize" : sidesize_val, "squares" : squares_val]);
+        auto world_val = json.pack(["sidesize" : json.pack(world.sidesize), "squares" : json.pack(app.data)]);
         return toJSON(&world_val);
     }
     
