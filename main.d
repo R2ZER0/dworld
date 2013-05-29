@@ -84,6 +84,20 @@ class JsonWorldSerialiser : WorldSerialiser {
     override public World thaw(string data){ return World.generateEmpty(128); }
 }
 
+JSONValue toJSONValue(int value) {
+    JSONValue jvalue;
+    jvalue.type = JSON_TYPE.INTEGER;
+    jvalue.integer = value;
+    return jvalue;
+}
+
+JSONValue toJSONValue(uint value) {
+    JSONValue jvalue;
+    jvalue.type = JSON_TYPE.UINTEGER;
+    jvalue.uinteger = value;
+    return jvalue;
+}
+
 JSONValue toJSONValue(float value) {
     JSONValue jvalue;
     jvalue.type = JSON_TYPE.FLOAT;
