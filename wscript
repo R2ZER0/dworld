@@ -6,11 +6,9 @@ def configure(conf):
 
 def build(bld):
         bld.program(
-            source='main.d',
+            source=['main.d','cuboid/util/json.d'],
             target='app',
-            use='cuboid',
             includes = ['.'],
             
             dflags = ['-g']
         ) 
-        bld.stlib(source='cuboid/util/json.d', target='cuboid') 
