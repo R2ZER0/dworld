@@ -2,6 +2,8 @@ import std.stdio;
 import std.exception : enforce;
 import std.json;
 import std.array;
+import json = cuboid.util.json;
+
 
 void main(string[] args)
 {
@@ -59,13 +61,13 @@ interface WorldSerialiser {
 class JsonWorldSerialiser : WorldSerialiser {
     
     JSONValue freezeSquare(Square square) {
-        JSONValue height_val = toJSONValue(square.height);
-        JSONValue val = toJSONValue(["height" : height_val]);
+        JSONValue height_val = json.pack(square.height);
+        JSONValue val = json.pack(["height" : height_val]);
         return val;
     }
     
     override public string freeze(World world) {
-        auto sidesize_val = toJSONValue(world.sidesize);
+        auto sidesize_val = json.pack(world.sidesize);
         
         auto app = appender(new JSONValue[0]);
         app.reserve(world.sidesize * world.sidesize);
@@ -76,46 +78,11 @@ class JsonWorldSerialiser : WorldSerialiser {
             }
         }
         
-        auto squares_val = toJSONValue(app.data);
-        auto world_val = toJSONValue(["sidesize" : sidesize_val, "squares" : squares_val]);
+        auto squares_val = json.pack(app.data);
+        auto world_val = json.pack(["sidesize" : sidesize_val, "squares" : squares_val]);
         return toJSON(&world_val);
     }
     
     override public World thaw(string data){ return World.generateEmpty(128); }
-}
-
-JSONValue toJSONValue(int value) {
-    JSONValue jvalue;
-    jvalue.type = JSON_TYPE.INTEGER;
-    jvalue.integer = value;
-    return jvalue;
-}
-
-JSONValue toJSONValue(uint value) {
-    JSONValue jvalue;
-    jvalue.type = JSON_TYPE.UINTEGER;
-    jvalue.uinteger = value;
-    return jvalue;
-}
-
-JSONValue toJSONValue(float value) {
-    JSONValue jvalue;
-    jvalue.type = JSON_TYPE.FLOAT;
-    jvalue.floating = value;
-    return jvalue;
-}
-
-JSONValue toJSONValue(JSONValue[string] value) {
-    JSONValue jvalue;
-    jvalue.type = JSON_TYPE.OBJECT;
-    jvalue.object = value;
-    return jvalue;
-}
-
-JSONValue toJSONValue(JSONValue[] value) {
-    JSONValue jvalue;
-    jvalue.type = JSON_TYPE.ARRAY;
-    jvalue.array = value;
-    return jvalue;
 }
 
