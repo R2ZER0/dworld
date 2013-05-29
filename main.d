@@ -1,8 +1,7 @@
 import std.stdio;
 import std.exception : enforce;
-import std.json;
 import std.array;
-import json = cuboid.util.json;
+import cuboid.util.json;
 
 
 void main(string[] args)
@@ -61,7 +60,15 @@ interface WorldSerialiser {
 class JsonWorldSerialiser : WorldSerialiser {
     
     JSONValue freezeSquare(Square square) {
-        return json.pack(["height" : json.pack(square.height)]);
+        return pack(["height" : pack(square.height)]);
+    }
+    
+    Square thawSquare(JSONValue squareVal) {
+        auto sobj = unpack!(JSONValue[string])(squareVal);
+        Square sval = {
+            unpack!float( sobj["height"] )
+        };
+        return sval;
     }
     
     override public string freeze(World world) {
@@ -75,8 +82,8 @@ class JsonWorldSerialiser : WorldSerialiser {
             }
         }
         
-        auto world_val = json.pack(["sidesize" : json.pack(world.sidesize), "squares" : json.pack(app.data)]);
-        return toJSON(&world_val);
+        auto world_val = pack(["sidesize" : pack(world.sidesize), "squares" : pack(app.data)]);
+        return world_val.toJSON();
     }
     
     override public World thaw(string data){ return World.generateEmpty(128); }
