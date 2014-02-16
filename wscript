@@ -6,16 +6,10 @@ def configure(conf):
 
 def build(bld):
         bld.program(
-            source=['main.d'],
+            source=['main.d', 'cuboid/world.d', 'cuboid/worldloader.d', 'msgpack.d'],
             target='testapp',
-            use = ['cuboid'],
             includes = ['.'],
+            lib = ['dyaml', 'dyaml-debug'],
             
-            dflags = ['-g']
-        )
-        
-        bld.stlib(
-            source = ['cuboid/world.d'],
-            target = 'cuboid',
             dflags = ['-g']
         )
